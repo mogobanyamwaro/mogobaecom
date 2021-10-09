@@ -41,64 +41,36 @@ const OrdersList = ({ history }) => {
     dispatch(deleteOrder(id));
   };
 
-const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    {
-      field: 'product',
-      headerName: 'Product',
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div className="productListItem">
-            <img className="productListImg" src={params.row.image} alt="" />
-            {params.row.name}
-          </div>
-        );
-      },
-    },
-    { field: 'stock', headerName: 'Stock', width: 200 },
-    {
-      field: 'status',
-      headerName: 'Status',
-      width: 120,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/admin/order/${params.row.id}`}>
-              <button className="productListEdit"><i className="fa fa-eye"></i></button>
-            </Link>
-            <DeleteOutline
-              className="productListDelete"
-              onClick={() => deleteOrderHandler(params.row.id)}
-            />
-          </>
-        );
-      },
-    },
-    {
-      field: 'price',
-      headerName: 'Price',
-      width: 160,
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <>
-            <Link to={`/admin/order/${params.row.id}`}>
-              <button className="productListEdit"><i className="fa fa-eye"></i></button>
-            </Link>
-            <DeleteOutline
-              className="productListDelete"
-              onClick={() => deleteOrderHandler(params.row.id)}
-            />
-          </>
-        );
-      },
-    },
-  ];
+  const setOrders = () => {
+    const data = {
+      columns: [
+        {
+          label: 'Order ID',
+          field: 'id',
+          sort: 'asc',
+        },
+        {
+          label: 'No of Items',
+          field: 'numofItems',
+          sort: 'asc',
+        },
+        {
+          label: 'Amount',
+          field: 'amount',
+          sort: 'asc',
+        },
+        {
+          label: 'Status',
+          field: 'status',
+          sort: 'asc',
+        },
+        {
+          label: 'Actions',
+          field: 'actions',
+        },
+      ],
+      rows: [],
+    };
 
     orders.forEach((order) => {
       data.rows.push({
@@ -112,7 +84,22 @@ const columns = [
           ) : (
             <p style={{ color: 'red' }}>{order.orderStatus}</p>
           ),
-    
+        actions: (
+          <Fragment>
+            <Link
+              to={`/admin/order/${order._id}`}
+              className="btn btn-primary py-1 px-2"
+            >
+              <i className="fa fa-eye"></i>
+            </Link>
+            <button
+              className="btn btn-danger py-1 px-2 ml-2"
+              onClick={() => deleteOrderHandler(order._id)}
+            >
+              <i className="fa fa-trash"></i>
+            </button>
+          </Fragment>
+        ),
       });
     });
 
@@ -122,10 +109,8 @@ const columns = [
   return (
     <Fragment>
       <MetaData title={'All Orders'} />
-      <div className="row">
-        <div className="col-12 col-md-2">
-          <Sidebar />
-        </div>
+      <>
+        <Sidebar />
 
         <div className="col-12 col-md-10">
           <Fragment>
@@ -144,10 +129,9 @@ const columns = [
             )}
           </Fragment>
         </div>
-      </div>
+      </>
     </Fragment>
   );
 };
-
 
 export default OrdersList;

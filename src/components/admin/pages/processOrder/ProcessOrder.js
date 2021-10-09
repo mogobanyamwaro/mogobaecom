@@ -11,8 +11,8 @@ import {
   getOrderDetails,
   updateOrder,
   clearErrors,
-} from '../../actions/orderActions';
-import { UPDATE_ORDER_RESET } from '../../constants/orderConstants';
+} from '../../../../actions/orderActions';
+import { UPDATE_ORDER_RESET } from '../../../../constants/orderConstants';
 
 const ProcessOrder = ({ match }) => {
   const [status, setStatus] = useState('');
@@ -63,12 +63,10 @@ const ProcessOrder = ({ match }) => {
   return (
     <Fragment>
       <MetaData title={`Process Order # ${order && order._id}`} />
-      <div className="row">
-        <div className="col-12 col-md-2">
-          <Sidebar />
-        </div>
+      <>
+        <Sidebar />
 
-        <div className="col-12 col-md-10">
+        <div className="col-11 col-md-10">
           <Fragment>
             {loading ? (
               <Loader />
@@ -99,7 +97,7 @@ const ProcessOrder = ({ match }) => {
                     <b>{isPaid ? 'PAID' : 'NOT PAID'}</b>
                   </p>
 
-                  <h4 className="my-4">Stripe ID</h4>
+                  <h4 className="my-4">PayPal ID</h4>
                   <p>
                     <b>{paymentInfo && paymentInfo.id}</b>
                   </p>
@@ -178,7 +176,7 @@ const ProcessOrder = ({ match }) => {
             )}
           </Fragment>
         </div>
-      </div>
+      </>
     </Fragment>
   );
 };

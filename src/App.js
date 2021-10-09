@@ -34,21 +34,16 @@ import ProductsList from './components/admin/pages/productList/ProductList';
 import UpdateProduct from './components/admin/pages/updateProduct/UpdateProduct';
 import NewProduct from './components/admin/pages/newProduct/NewProduct';
 import ProcessOrder from './components/admin/pages/processOrder/ProcessOrder';
-// import ProductsList from './components/admin/ProductsList';
-// import NewProduct from './components/admin/NewProduct';
-// import UpdateProduct from './components/admin/UpdateProduct';
-// import OrdersList from './components/admin/OrdersList';
-// import ProcessOrder from './components/admin/ProcessOrder';
-// import UsersList from './components/admin/UsersList';
-// import UpdateUser from './components/admin/UpdateUser';
-// import ProductReviews from './components/admin/ProductReviews';
+import OrdersList from './components/admin/pages/orderList/OrdersList';
+import UserList from './components/admin/pages/userList/UserList';
+import ProductReviews from './components/admin/pages/productReview/ProductReviews';
+import UpdateUser from './components/admin/pages/updateuser/UpdateUser';
 
 import ProtectedRoute from './components/route/ProtectedRoute';
 
 import { useSelector } from 'react-redux';
 import { loadUser } from './actions/userActions';
 import store from './store';
-import Sidebar from './components/admin/sidebar/Sidebar';
 
 function App() {
   const { user, isAuthenticated, loading } = useSelector((state) => state.auth);
@@ -119,18 +114,22 @@ function App() {
               component={ProcessOrder}
               exact
             />
-            {/* 
             <ProtectedRoute
               path="/admin/orders"
               isAdmin={true}
               component={OrdersList}
               exact
             />
-          
             <ProtectedRoute
               path="/admin/users"
               isAdmin={true}
-              component={UsersList}
+              component={UserList}
+              exact
+            />
+            <ProtectedRoute
+              path="/admin/reviews"
+              isAdmin={true}
+              component={ProductReviews}
               exact
             />
             <ProtectedRoute
@@ -139,12 +138,12 @@ function App() {
               component={UpdateUser}
               exact
             />
-            <ProtectedRoute
-              path="/admin/reviews"
-              isAdmin={true}
-              component={ProductReviews}
-              exact
-            /> */}
+            {/* 
+           
+          
+          
+         
+             */}
           </Switch>
         </div>
         {!loading && (!isAuthenticated || user.role !== 'admin') && <Footer />}

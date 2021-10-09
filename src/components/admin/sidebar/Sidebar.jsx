@@ -57,7 +57,7 @@ export default function Sidebar() {
             <Link to="/admin/orders" className="link">
               <li className="sidebarListItem">
                 <PermIdentity className="sidebarIcon" />
-                Process Orders
+                List of Orders
               </li>
             </Link>
             <Link to="/admin/users" className="link">

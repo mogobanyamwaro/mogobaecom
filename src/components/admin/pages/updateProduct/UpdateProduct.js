@@ -134,14 +134,12 @@ const UpdateProduct = ({ match, history }) => {
       <MetaData title={'Update Product'} />
       <Sidebar />
       <div className="newProduct">
-        <h1 className="addProductTitle">New Product</h1>
+        <h1 className="addProductTitle">Update Product</h1>
         <form
           className="addProductForm"
           onSubmit={submitHandler}
           encType="multipart/form-data"
         >
-          <h1 className="mb-4">Update Product</h1>
-
           <div className="addProductItem">
             <label htmlFor="name_field">Name</label>
             <input
