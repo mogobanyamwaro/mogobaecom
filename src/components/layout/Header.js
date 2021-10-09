@@ -1,84 +1,181 @@
-import React, { Fragment } from 'react'
-import { Route, Link } from 'react-router-dom'
+import React, { Fragment } from 'react';
+import { Route, Link } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux'
-import { useAlert } from 'react-alert'
-import { logout } from '../../actions/userActions'
+import { useDispatch, useSelector } from 'react-redux';
+import { useAlert } from 'react-alert';
+import { logout } from '../../actions/userActions';
 
-import Search from './Search'
+import { Badge } from '@material-ui/core';
+import { ShoppingCartOutlined } from '@material-ui/icons';
 
-import '../../App.css'
+import styled from 'styled-components';
+import { mobile } from '../../responsive';
+
+import Search from './Search';
+
+import { useLocation } from 'react-router';
 
 const Header = () => {
-    const alert = useAlert();
-    const dispatch = useDispatch();
+  const location = useLocation();
+  const alert = useAlert();
+  const dispatch = useDispatch();
 
-    const { user, loading } = useSelector(state => state.auth)
-    const { cartItems } = useSelector(state => state.cart)
+  const { isAuthenticated, user, loading } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
 
-    const logoutHandler = () => {
-        dispatch(logout());
-        alert.success('Logged out successfully.')
-    }
+  const logoutHandler = () => {
+    dispatch(logout());
+    alert.success('Logged out successfully.');
+  };
 
-    return (
-        <Fragment>
-            <nav className="navbar row">
-                <div className="col-12 col-md-3">
-                    <div className="navbar-brand">
-                        <Link to="/">
-                            <img src="/images/shopit_logo.png" />
-                        </Link>
-                    </div>
-                </div>
+  return (
+    <Container>
+      <Wrapper>
+        <Left>
+          <Link to="/">
+            <Logo>FAINA TECH</Logo>
+          </Link>
+        </Left>
+        {location.pathname === `/` && (
+          <Center>
+            <Route render={({ history }) => <Search history={history} />} />
+          </Center>
+        )}
+        <Right>
+          {isAuthenticated === true ? (
+            <div className="ml-4 dropdown d-inline">
+              <Link
+                to="#!"
+                className="btn dropdown-toggle text-white mr-4"
+                type="button"
+                id="dropDownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <figure className="avatar avatar-nav">
+                  <img
+                    src={user.avatar && user.avatar.url}
+                    alt={user && user.name}
+                    className="rounded-circle"
+                  />
+                </figure>
+                <span>{user && user.name}</span>
+              </Link>
 
-                <div className="col-12 col-md-6 mt-2 mt-md-0">
-                    <Route render={({ history }) => <Search history={history} />} />
-                </div>
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropDownMenuButton"
+              >
+                {user && user.role === 'admin' && (
+                  <Link className="dropdown-item" to="/dashboard">
+                    Dashboard
+                  </Link>
+                )}
+                <Link className="dropdown-item" to="/orders/me">
+                  Orders
+                </Link>
+                <Link className="dropdown-item" to="/me">
+                  Profile
+                </Link>
+                <Link
+                  className="dropdown-item text-danger"
+                  to="/"
+                  onClick={logoutHandler}
+                >
+                  Logout
+                </Link>
+              </div>
+            </div>
+          ) : (
+            !loading && (
+              <>
+                {' '}
+                <MenuItem>
+                  <Link to="/register">REGISTER</Link>
+                </MenuItem>
+                <MenuItem>
+                  <Link to="/login">SIGN IN</Link>
+                </MenuItem>
+              </>
+            )
+          )}
+          <MenuItem>
+            <Link to="/cart">
+              <Badge badgeContent={cartItems.length} color="primary">
+                <ShoppingCartOutlined />
+              </Badge>
+            </Link>
+          </MenuItem>
+        </Right>
+      </Wrapper>
+    </Container>
+  );
+};
 
-                <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
-                    <Link to="/cart" style={{ textDecoration: 'none' }} >
-                        <span id="cart" className="ml-3">Cart</span>
-                        <span className="ml-1" id="cart_count">{cartItems.length}</span>
-                    </Link>
+export default Header;
 
-                    {user ? (
-                        <div className="ml-4 dropdown d-inline">
-                            <Link to="#!" className="btn dropdown-toggle text-white mr-4" type="button" id="dropDownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+const Container = styled.div`
+  height: 60px;
+  ${mobile({ height: '50px' })}
+  background-color: #286077;
+  margin-bottom: 10px;
+  position: sticky;
+`;
 
-                                <figure className="avatar avatar-nav">
-                                    <img
-                                        src={user.avatar && user.avatar.url}
-                                        alt={user && user.name}
-                                        className="rounded-circle"
-                                    />
-                                </figure>
-                                <span>{user && user.name}</span>
-                            </Link>
+const Wrapper = styled.div`
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-evenly; */
+  ${mobile({ padding: '10px 0px' })}
+`;
 
-                            <div className="dropdown-menu" aria-labelledby="dropDownMenuButton">
+const Left = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+`;
 
-                                {user && user.role === 'admin' && (
-                                    <Link className="dropdown-item" to="/dashboard">Dashboard</Link>
-                                )}
-                                <Link className="dropdown-item" to="/orders/me">Orders</Link>
-                                <Link className="dropdown-item" to="/me">Profile</Link>
-                                <Link className="dropdown-item text-danger" to="/" onClick={logoutHandler}>
-                                    Logout
-                                </Link>
+const Language = styled.span`
+  font-size: 14px;
+  cursor: pointer;
+  ${mobile({ display: 'none' })}
+`;
 
-                            </div>
+const SearchContainer = styled.div`
+  border: 0.5px solid lightgray;
+  display: flex;
+  align-items: center;
+  margin-left: 25px;
+  padding: 5px;
+`;
 
+const Input = styled.input`
+  border: none;
+  ${mobile({ width: '50px' })}
+`;
 
-                        </div>
+const Center = styled.div`
+  flex: 2;
+  text-align: center;
+`;
 
-                    ) : !loading && <Link to="/login" className="btn ml-4" id="login_btn">Login</Link>}
+const Logo = styled.h1`
+  font-weight: bold;
+  ${mobile({ fontSize: '24px' })}
+`;
+const Right = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  ${mobile({ flex: 2, justifyContent: 'center' })}
+`;
 
-
-                </div>
-            </nav>
-        </Fragment>
-    )
-}
-
-export default Header
+const MenuItem = styled.div`
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 25px;
+  ${mobile({ fontSize: '12px', marginLeft: '10px' })}
+`;

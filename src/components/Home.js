@@ -6,10 +6,12 @@ import 'rc-slider/assets/index.css';
 import MetaData from './layout/MetaData';
 import Product from './product/Product';
 import Loader from './layout/Loader';
-
+import Slidercustom from './layout/Slider';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 import { getProducts } from '../actions/productActions';
+import Categories from './layout/Categories';
+import Newsletter from './layout/Newsletter';
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -73,9 +75,8 @@ const Home = ({ match }) => {
       ) : (
         <Fragment>
           <MetaData title={'Buy Best Products Online'} />
-
-          <h1 id="products_heading">Jumia Products</h1>
-
+          {!keyword && <Slidercustom />}
+          {!keyword && <Categories />}
           <section id="products" className="container mt-5">
             <div className="row">
               {keyword ? (
@@ -182,6 +183,7 @@ const Home = ({ match }) => {
               />
             </div>
           )}
+          <Newsletter />
         </Fragment>
       )}
     </Fragment>
